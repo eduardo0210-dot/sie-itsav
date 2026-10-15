@@ -1,0 +1,67 @@
+CREATE TABLE tbl_alumno (
+    id_alumno UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL,
+    apellido_paterno VARCHAR(100) NOT NULL,
+    apellido_materno VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    curp VARCHAR(18) NOT NULL,
+    num_telefono_fijo VARCHAR(10) NULL,
+    num_telefono_movil VARCHAR(10) NOT NULL,
+    correo_personal VARCHAR(100) NULL,
+    correo_institucional VARCHAR(100) NULL
+
+);
+
+CReATE TABLE ctl_paises(
+    id_pais BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    prefijo VARCHAR(5)NOT NULL
+);
+
+CREATE TABLE ctl_estados (
+    id_estado BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
+    nombre VARCHAR(100) NOT NULL,
+    id_pais BIGINT,
+    CONSTRAINT fk_paises_to_estados FOREIGN KEY (id_pais) REFERENCES  ctl_paises (id_pais) ON DELETE CASCADE
+);
+
+CREATE TABLE ctl_ciudades(
+    id_ciudad BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    estado BIGINT,
+    CONSTRAINT fk_estado_to_ciudades FOREIGN KEY (estado) REFERENCES ctl_estados(id_estado) ON DELETE CASCADE
+);
+
+CREATE TABLE tbl_direcciones (
+    ID_direcciones uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    calle VARCHAR(50) NOT NULL,
+    bumer_ext VARCHAR(10) NOT NULL,
+    numero_int VARCHAR(10) NULL,
+    colonia VARCHAR(50) NOT NULL,
+    cp VARCHAR(5) NOT NULL,
+    ciudad BIGINT,
+    CONSTRAINT fk_ciudades_to_direcciones FOREIGN KEY (ciudad) REFERENCES ctl_ciudades(id_ciudad) ON DELETE CASCADE
+
+);
+
+CREATE TABLE rel_alumnos_direcciones(
+    direccion uuid,
+    alumno uuid,
+    PRIMARY KEY (direccion,alumno)
+);
+
+CREATE TABLE tbl_datos_medicos(
+    id_dato_medico uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    tipo_sangre VARCHAR(5)NULL
+
+);
+
+CREATE TABLE ctl_discapacidades_medicas(
+    id_discapacidad INT GENERATED ALWAYS AS IDENTITY  PRIMARY KEY,
+    nombre VARCHAR(20) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE rel_datos_medicos_discapacidades(
+
+)
